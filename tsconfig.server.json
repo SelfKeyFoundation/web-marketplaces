@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es2016",
+    "skipLibCheck": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noImplicitAny": false,
+    "experimentalDecorators": true,
+    "removeComments": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "jsx": "react",
+    "jsxFactory": "h",
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+  },
+  "include": [
+    "./src/server/*.ts",
+    "./src/server/*.tsx",
+    "./src/server/**/*.ts",
+    "./src/server/**/*.tsx",
+    "./src/app/*.ts",
+    "./src/app/*.tsx",
+    "./src/app/**/*.ts",
+    "./src/app/**/*.tsx"
+  ],
+  "exclude": [
+    "./src/public",
+    "node_modules/**"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "react"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "preact"
+  ],
+  "settings": {
+    "react": {
+      "pragma": "h",
+      "version": "preact"
+    }
+  },
+  "rules": {
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error", { "varsIgnorePattern": "[<]" }],
+    "react/no-unknown-property": ["error", { "ignore": ["class", "for"] }],
+    "@typescript-eslint/explicit-function-return-type": "off"
+  }
+}
