@@ -1,9 +1,11 @@
 import { Request, Response , NextFunction } from 'express';
 import { AirtableConnection } from '../lib/airtable'
 import { getAssetsVersion } from '../lib/assets';
+/*
 import { h } from 'preact';
 import { render } from 'preact-render-to-string';
-import { WebMarketplaces } from '../../app';
+import { App } from '../../app';
+*/
 
 const LAYOUT = 'application';
 
@@ -20,7 +22,7 @@ const root = async (req: Request, res: Response , next: NextFunction) => {
 
   const { js, css } = getAssetsVersion();
 
-  const ssr = render(<WebMarketplaces path={req.url} data={data} />);
+  const ssr = ''; //render(<App path={req.url} data={data} />);
   res.render(`index`, { ssr, data, js, css, LAYOUT });
 };
 

@@ -42,7 +42,7 @@ const Cache = {
       return shouldSendCache ? Cache.get(path) : undefined;
     },
 
-    get: (path: string): object | undefined => {
+    get: (path: string): Record<string, unknown> | undefined => {
       if (existsSync(path)) {
         return JSON.parse(readFileSync(path, 'utf8'));
       }

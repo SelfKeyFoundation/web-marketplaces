@@ -72,4 +72,4 @@ class AirtableConnection {
   }
 }
 
-export { AirtableConnection };
+export { AirtableConnection };

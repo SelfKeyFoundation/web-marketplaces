@@ -3,7 +3,7 @@ import routeCache from 'route-cache';
 import * as controller from '../controllers';
 
 class UrlRoutes {
-  protected basePath: string = '/views';
+  protected basePath = '/views';
 
   constructor (app: Application) {
     this.loadRoutes(app);

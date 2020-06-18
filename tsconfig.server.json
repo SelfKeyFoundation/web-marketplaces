@@ -13,7 +13,7 @@
     "outDir": "dist",
     "baseUrl": ".",
     "jsx": "react",
-    "jsxFactory": "h",
+    "jsxFactory": "React.createElement",
     "typeRoots": [
       "./node_modules/@types"
     ],

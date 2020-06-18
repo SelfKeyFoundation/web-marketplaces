@@ -1,5 +1,6 @@
-import { h, render } from 'preact';
-import { WebMarketplaces } from '../../app/web-marketplaces';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { App } from '../../app';
 
 class Application {
   constructor(target = 'es6') {
@@ -10,7 +11,7 @@ class Application {
   render () {
     const data: any = window['__data__'];
     // const countries: any = window['__countries__'];
-    render(<WebMarketplaces path={document.location.pathname} data={data} />, document.getElementById('app')!);
+    ReactDOM.render(<App path={document.location.pathname} data={data} />, document.getElementById('app')!);
   }
 }
 
