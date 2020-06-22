@@ -1,0 +1,1 @@
+export { IncorporationsListPage } from './incorporations-list-page';

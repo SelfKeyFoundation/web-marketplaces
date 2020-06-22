@@ -27,7 +27,7 @@ class UrlRoutes {
 
     app.get('/data', routeCache.cacheSeconds(CACHE_TIMEOUT, this.cacheKey),
       (req: Request, res: Response, next: NextFunction) => {
-        controller.root(req, res, next);
+        controller.data(req, res, next);
     });
 
     app.get('*', (req: Request, res: Response) => {

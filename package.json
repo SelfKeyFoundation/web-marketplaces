@@ -32,6 +32,9 @@
     "errorhandler": "^1.5.1",
     "express": "^4.17.1",
     "express-ejs-layouts": "^2.5.0",
+    "flag-icon-css": "^3.5.0",
+    "lodash": "^4.17.15",
+    "node-fetch": "^2.6.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-router-dom": "^5.2.0",
@@ -63,10 +66,11 @@
     "nodemon": "^2.0.4",
     "postcss-import": "^12.0.1",
     "postcss-preset-env": "^6.7.0",
+    "postcss-url": "^8.0.0",
     "rollup": "^2.11.2",
     "rollup-plugin-postcss": "^3.1.1",
     "rollup-plugin-terser": "^6.1.0",
-    "selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#631ec2b0ecfa19c7629d2774278ba246d2224d65",
+    "selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#7e6ba1c3977f8c8ec002dc771d62ed825d381d46",
     "tslib": "^2.0.0",
     "typescript": "^3.9.3"
   }

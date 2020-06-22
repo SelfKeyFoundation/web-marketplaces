@@ -33,7 +33,7 @@ const styles = createStyles({
   }
 });
 
-const MarketplacesComponent = withStyles(styles)(({ classes, history }: RouteComponentProps & WithStyles<typeof styles>) => (
+const MarketplaceCategoriesComponent = withStyles(styles)(({ classes, history }: RouteComponentProps & WithStyles<typeof styles>) => (
   <Grid
     id="viewMarketplace"
     container
@@ -66,5 +66,5 @@ const MarketplacesComponent = withStyles(styles)(({ classes, history }: RouteCom
   </Grid>
 ));
 
-const Marketplaces = withRouter(MarketplacesComponent);
-export { Marketplaces };
+const MarketplaceCategories = withRouter(MarketplaceCategoriesComponent);
+export { MarketplaceCategories };

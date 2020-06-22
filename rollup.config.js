@@ -8,6 +8,7 @@ import postcss from 'rollup-plugin-postcss';
 import postCssPresetEnv from 'postcss-preset-env';
 // Automatically inline imports
 import postCssImport from 'postcss-import';
+import postCssUrl from 'postcss-url';
 
 import { rollupManifest as manifest } from './lib/rollup-manifest';
 import babel              from '@rollup/plugin-babel';
@@ -56,7 +57,7 @@ const plugins = [
   // Transform CSS
   postcss({
     extract: true,
-    plugins: [postCssImport, postCssPresetEnv],
+    plugins: [postCssImport, postCssPresetEnv, postCssUrl({ url: 'inline' })],
     sourceMap: nodeEnv !== prod
     // postcssModulesOptions: { ... }
   }),
