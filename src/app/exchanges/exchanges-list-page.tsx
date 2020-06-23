@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import { Button, Typography, Grid } from '@material-ui/core';
 import { WithStyles, withStyles, createStyles } from '@material-ui/core';
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { IncorporationsIcon } from 'selfkey-ui/build/lib/icons';
-import { IncorporationsListTable } from './incorporations-list-table';
+import { ExchangeIcon } from 'selfkey-ui/build/lib/icons/exchange';
+import { ExchangesListTable } from './exchanges-list-table';
 import { PageLoading } from '../common';
 
 const styles = createStyles({
@@ -35,15 +35,15 @@ const styles = createStyles({
   },
 });
 
-type IncorporationsListPageComponentProps = {
+type ExchangesListPageComponentProps = {
   keyRate?: number;
 };
 
-type IncorporationsListPageComponentState = {
+type ExchangesListPageComponentState = {
   data: any | undefined;
 };
 
-class IncorporationsListPageComponent extends PureComponent<IncorporationsListPageComponentProps & RouteComponentProps & WithStyles<typeof styles>, IncorporationsListPageComponentState> {
+class ExchangesListPageComponent extends PureComponent<ExchangesListPageComponentProps & RouteComponentProps & WithStyles<typeof styles>, ExchangesListPageComponentState> {
 
   constructor(props) {
     super(props);
@@ -96,13 +96,13 @@ class IncorporationsListPageComponent extends PureComponent<IncorporationsListPa
               className={classes.pageContent}
             >
               <Grid item id="header" className={classes.header}>
-                <IncorporationsIcon className={classes.icon} />
+                <ExchangeIcon className={classes.icon} css={{}} />
                 <Typography variant="h1" className={classes.headerTitle}>
-                  Incorporation Marketplace
+                  Exchanges Marketplace
                 </Typography>
               </Grid>
               <Grid item direction="row" justify="space-evenly" alignItems="center">
-                <IncorporationsListTable
+                <ExchangesListTable
                   keyRate={keyRate}
                   data={data}
                   onDetailsClick={this.onDetailsClick}
@@ -116,8 +116,8 @@ class IncorporationsListPageComponent extends PureComponent<IncorporationsListPa
   }
 }
 
-const styledComponent = withStyles(styles)(IncorporationsListPageComponent);
+const styledComponent = withStyles(styles)(ExchangesListPageComponent);
 const routedComponent = withRouter(styledComponent);
 
 export default routedComponent;
-export { routedComponent as IncorporationsListPage };
+export { routedComponent as ExchangesListPage };

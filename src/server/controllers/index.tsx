@@ -1,9 +1,8 @@
 import { Request, Response , NextFunction } from 'express';
 import { AirtableConnection } from '../lib/airtable'
 import { getAssetsVersion } from '../lib/assets';
-import fetch from 'node-fetch';
-import { camelCase, mapKeys } from 'lodash';
 import { FlagTheoryAPI } from '../lib/flag-theory-api';
+import { SelfkeyAPI } from '../lib/selfkey-api';
 /*
 import { h } from 'preact';
 import { render } from 'preact-render-to-string';
@@ -11,10 +10,6 @@ import { App } from '../../app';
 */
 
 const LAYOUT = 'application';
-
-const format = (fetched) => fetched.entities
-  .filter(e => Object.keys(e.data).length)
-  .map(entity => mapKeys(entity.data, (value, key) => camelCase(key)));
 
 const root = async (req: Request, res: Response , next: NextFunction) => {
 
@@ -40,18 +35,15 @@ const data = async (req: Request, res: Response , next: NextFunction) => {
     next(new Error('Invalid Airtable API key or API base, make sure .env or environment variables exist'));
   }
 
-  let response = await fetch('https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=Inventory');
-  let json = await response.json();
-  const inventory = format(json);
-
-  response = await fetch('https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=Incorporations');
-  json = await response.json();
-  const skIncorporations = format(json);
+  const sk = new SelfkeyAPI();
+  const inventory = await sk.fetchInventory();
+  const incorporations = await sk.fetchData('Incorporations');
+  const exchanges = await sk.fetchData('Exchanges');
 
   const ft = new FlagTheoryAPI();
   const ftIncorporations = await ft.fetchIncorporations();
 
-  skIncorporations.forEach(inc => {
+  [...incorporations, ...exchanges].forEach(inc => {
     let index = inventory.findIndex(i => i.sku === inc.sku);
     if (index !== -1) {
       inventory[index].data = inc;

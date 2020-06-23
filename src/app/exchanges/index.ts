@@ -1,0 +1,1 @@
+export { ExchangesListPage } from './exchanges-list-page';
