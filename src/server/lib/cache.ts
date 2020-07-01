@@ -6,9 +6,12 @@ let cacheInterval = DEFAULT_CACHE_INTERVAL;
 const Cache = {
     setInterval: (interval: number) => cacheInterval = interval,
 
-    pathForRequest: () => process.env.NODE_ENV === 'production' ? `cache/cache.json` : `dist/cache/cache.json`,
+    pathForRequest: () => Cache.cachePath() + 'cache.json',
+
+    cachePath: () => process.env.NODE_ENV === 'production' ? `cache/` : `dist/cache/`,
 
     write: (path: string, object: any) => {
+      path = Cache.cachePath() + path;
       const pathComponents = path.split('/');
       let intermediatePath = '';
 

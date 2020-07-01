@@ -1,0 +1,1 @@
+export { LoansListPage } from './loans-list-page';

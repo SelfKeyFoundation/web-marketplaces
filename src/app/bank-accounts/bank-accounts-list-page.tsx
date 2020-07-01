@@ -2,13 +2,14 @@ import React, { PureComponent } from 'react';
 import { Button, Typography, Grid } from '@material-ui/core';
 import { WithStyles, withStyles, createStyles } from '@material-ui/core';
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { ExchangeIcon } from 'selfkey-ui/build/lib/icons/exchange';
-import { ExchangesListTable } from './exchanges-list-table';
+import { BankIcon } from 'selfkey-ui/build/lib/icons';
+import { BankAccountsListTable } from './bank-accounts-list-table';
+import { BankingAccountTypeTabs } from './bank-accounts-type-tabs';
 import { PageLoading } from '../common';
 
 const styles = createStyles({
   pageContent: {
-    margin: '0 auto'
+    margin: '0 auto',
   },
   header: {
     borderBottom: 'solid 1px #475768',
@@ -35,15 +36,15 @@ const styles = createStyles({
   },
 });
 
-type ExchangesListPageComponentProps = {
+type BankAccountsListPageComponentProps = {
   keyRate?: number;
 };
 
-type ExchangesListPageComponentState = {
+type BankAccountsListPageComponentState = {
   data: any | undefined;
 };
 
-class ExchangesListPageComponent extends PureComponent<ExchangesListPageComponentProps & RouteComponentProps & WithStyles<typeof styles>, ExchangesListPageComponentState> {
+class BankAccountsListPageComponent extends PureComponent<BankAccountsListPageComponentProps & RouteComponentProps & WithStyles<typeof styles>, BankAccountsListPageComponentState> {
 
   constructor(props) {
     super(props);
@@ -59,6 +60,8 @@ class ExchangesListPageComponent extends PureComponent<ExchangesListPageComponen
   onBackClick = () => this.props.history.push('/');
 
   onDetailsClick = jurisdiction => {};
+
+  onAccountTypeChange = () => {};
 
   render () {
     const { classes, keyRate } = this.props;
@@ -88,7 +91,7 @@ class ExchangesListPageComponent extends PureComponent<ExchangesListPageComponen
         {!loading && (
           <Grid item style={{ width: '100%' }}>
             <Grid
-              id="incorporations"
+              id="bank-accounts"
               container
               direction="column"
               justify="flex-start"
@@ -96,13 +99,16 @@ class ExchangesListPageComponent extends PureComponent<ExchangesListPageComponen
               className={classes.pageContent}
             >
               <Grid item id="header" className={classes.header}>
-                <ExchangeIcon className={classes.icon} css={{}} />
+                <BankIcon className={classes.icon} css={{}} />
                 <Typography variant="h1" className={classes.headerTitle}>
-                  Exchanges Marketplace
+                  Bank Accounts Marketplace
                 </Typography>
               </Grid>
               <Grid item direction="row" justify="space-evenly" alignItems="center">
-                <ExchangesListTable
+                <BankingAccountTypeTabs accountType={'personal'} onAccountTypeChange={this.onAccountTypeChange} />
+              </Grid>
+              <Grid item direction="row" justify="space-evenly" alignItems="center">
+                <BankAccountsListTable
                   keyRate={keyRate}
                   data={data}
                   onDetailsClick={this.onDetailsClick}
@@ -116,8 +122,8 @@ class ExchangesListPageComponent extends PureComponent<ExchangesListPageComponen
   }
 }
 
-const styledComponent = withStyles(styles)(ExchangesListPageComponent);
+const styledComponent = withStyles(styles)(BankAccountsListPageComponent);
 const routedComponent = withRouter(styledComponent);
 
 export default routedComponent;
-export { routedComponent as ExchangesListPage };
+export { routedComponent as BankAccountsListPage };

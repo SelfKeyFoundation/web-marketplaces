@@ -4,6 +4,8 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 // import { WithStyles, withStyles, createStyles } from '@material-ui/core';
 import { IncorporationsListPage } from './incorporations';
 import { ExchangesListPage } from './exchanges';
+import { BankAccountsListPage } from './bank-accounts';
+import { LoansListPage } from './loans';
 
 const MarketplaceComponent = (({ match }: RouteComponentProps) => {
   let marketplaceComponent: any = null;
@@ -16,10 +18,10 @@ const MarketplaceComponent = (({ match }: RouteComponentProps) => {
       marketplaceComponent = <ExchangesListPage />;
       break;
     case 'bank-accounts':
-      marketplaceComponent = <IncorporationsListPage />;
+      marketplaceComponent = <BankAccountsListPage />;
       break;
     case 'loans':
-      marketplaceComponent = <IncorporationsListPage />;
+      marketplaceComponent = < LoansListPage />;
       break;
   }
 

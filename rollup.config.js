@@ -1,16 +1,16 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-// import alias from '@rollup/plugin-alias';
 import typescript from '@rollup/plugin-typescript';
 import replace from '@rollup/plugin-replace';
+// import alias from '@rollup/plugin-alias';
 
 import postcss from 'rollup-plugin-postcss';
 import postCssPresetEnv from 'postcss-preset-env';
-// Automatically inline imports
-import postCssImport from 'postcss-import';
+import postCssImport from 'postcss-import'; // Automatically inline imports
 import postCssUrl from 'postcss-url';
 
 import { rollupManifest as manifest } from './lib/rollup-manifest';
+
 import babel              from '@rollup/plugin-babel';
 import { terser }         from 'rollup-plugin-terser'
 

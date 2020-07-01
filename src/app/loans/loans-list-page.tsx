@@ -2,13 +2,13 @@ import React, { PureComponent } from 'react';
 import { Button, Typography, Grid } from '@material-ui/core';
 import { WithStyles, withStyles, createStyles } from '@material-ui/core';
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { ExchangeIcon } from 'selfkey-ui/build/lib/icons/exchange';
-import { ExchangesListTable } from './exchanges-list-table';
+import { LoanIcon } from 'selfkey-ui/build/lib/icons';
+import { LoansTabs } from './loans-tabs';
 import { PageLoading } from '../common';
 
 const styles = createStyles({
   pageContent: {
-    margin: '0 auto'
+    margin: '0 auto',
   },
   header: {
     borderBottom: 'solid 1px #475768',
@@ -35,19 +35,24 @@ const styles = createStyles({
   },
 });
 
-type ExchangesListPageComponentProps = {
+type LoansListPageComponentProps = RouteComponentProps & WithStyles<typeof styles> & {
   keyRate?: number;
-};
+  tab?: string;
+}
 
-type ExchangesListPageComponentState = {
+type LoansListPageComponentState = {
   data: any | undefined;
+  tab: string;
 };
 
-class ExchangesListPageComponent extends PureComponent<ExchangesListPageComponentProps & RouteComponentProps & WithStyles<typeof styles>, ExchangesListPageComponentState> {
+class LoansListPageComponent extends PureComponent<LoansListPageComponentProps, LoansListPageComponentState> {
 
   constructor(props) {
     super(props);
-    this.state = { data: undefined };
+    this.state = {
+      data: undefined,
+      tab: props.tab ? props.tab : 'lending'
+    };
   }
 
   async componentDidMount () {
@@ -60,10 +65,13 @@ class ExchangesListPageComponent extends PureComponent<ExchangesListPageComponen
 
   onDetailsClick = jurisdiction => {};
 
+  onTabChange = (tab: string) => this.setState({ tab });
+
   render () {
-    const { classes, keyRate } = this.props;
-    const { data } = this.state;
+    const { classes, rates, fiatRates } = this.props;
+    const { data, tab } = this.state;
     const loading = !data
+
     return (
       <Grid container style={{ width: '100%' }}>
         <Grid item>
@@ -88,7 +96,7 @@ class ExchangesListPageComponent extends PureComponent<ExchangesListPageComponen
         {!loading && (
           <Grid item style={{ width: '100%' }}>
             <Grid
-              id="incorporations"
+              id="loans"
               container
               direction="column"
               justify="flex-start"
@@ -96,16 +104,20 @@ class ExchangesListPageComponent extends PureComponent<ExchangesListPageComponen
               className={classes.pageContent}
             >
               <Grid item id="header" className={classes.header}>
-                <ExchangeIcon className={classes.icon} css={{}} />
+                <LoanIcon className={classes.icon} css={{}} />
                 <Typography variant="h1" className={classes.headerTitle}>
-                  Exchanges Marketplace
+                  Loans Marketplace
                 </Typography>
               </Grid>
-              <Grid item direction="row" justify="space-evenly" alignItems="center">
-                <ExchangesListTable
-                  keyRate={keyRate}
-                  data={data}
+              <Grid item>
+                <LoansTabs
+                  inventory={data.filter(item => item.category === 'loans')}
+                  onTabChange={this.onTabChange}
                   onDetailsClick={this.onDetailsClick}
+                  tokens={['BTC', 'ETH', 'KEY']}
+                  tab={tab}
+                  rates={rates}
+                  fiatRates={fiatRates}
                 />
               </Grid>
             </Grid>
@@ -116,8 +128,8 @@ class ExchangesListPageComponent extends PureComponent<ExchangesListPageComponen
   }
 }
 
-const styledComponent = withStyles(styles)(ExchangesListPageComponent);
+const styledComponent = withStyles(styles)(LoansListPageComponent);
 const routedComponent = withRouter(styledComponent);
 
 export default routedComponent;
-export { routedComponent as ExchangesListPage };
+export { routedComponent as LoansListPage };

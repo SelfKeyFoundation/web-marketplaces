@@ -65,7 +65,7 @@ class IncorporationsListPageComponent extends PureComponent<IncorporationsListPa
     const { data } = this.state;
     const loading = !data
     return (
-      <Grid container>
+      <Grid container style={{ width: '100%' }}>
         <Grid item>
           <div className={classes.backButtonContainer}>
             <Button
@@ -86,7 +86,7 @@ class IncorporationsListPageComponent extends PureComponent<IncorporationsListPa
         </Grid>
         {loading && <PageLoading />}
         {!loading && (
-          <Grid item>
+          <Grid item style={{ width: '100%' }}>
             <Grid
               id="incorporations"
               container

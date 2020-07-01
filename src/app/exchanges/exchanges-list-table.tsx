@@ -1,6 +1,6 @@
 import React from 'react';
 import { WithStyles, withStyles, createStyles } from '@material-ui/core';
-import { Typography /*, Grid */ } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
 import { LargeTableHeadRow /*, TagTableCell */ } from 'selfkey-ui/build/lib/materialui/tables';
 import { Tag } from 'selfkey-ui/build/lib/materialui/typography';
-// import { ProgramPrice, FlagCountryName, DetailsButton } from '../common';
+import { DetailsButton } from '../common';
 
 const styles = createStyles({
   table: {
@@ -87,6 +87,11 @@ const styles = createStyles({
     whiteSpace: 'normal',
     width: '100px',
     wordBreak: 'break-word'
+  },
+  resident: {
+    marginRight: '5px',
+    whiteSpace: 'initial',
+    display: 'inline-block'
   }
 });
 
@@ -114,9 +119,11 @@ const ExchangesListTable = withStyles(styles)(
       return icon;
     }
 
+    const getButtonText = status => status === 'Inactive' ? 'Coming Soon' : 'Details';
+
     const isFiatSupported = (item) => item.data.fiatSupported && item.data.fiatSupported !== '-' && item.data.fiatSupported.length !== 0 && item.data.fiatSupported[0] !== 'Not Available';
 
-    // const isNotExcludedResidents = (item) => item.data.excludedResidents && item.data.excludedResidents === '-' || item.data.excludedResidents.length === 0 || item.data.excludedResidents[0] === 'None';
+    const isNotExcludedResidents = (item) => !item.data.excludedResidents || item.data.excludedResidents === '-' || item.data.excludedResidents.length === 0 || item.data.excludedResidents[0] === 'None';
 
     const isFiatPayments = (item) => item.data.fiatPayments && item.data.fiatPayments !== '-' && item.data.fiatPayments.length !== 0 && item.data.fiatPayments[0] !== 'Not Available';
 
@@ -127,22 +134,12 @@ const ExchangesListTable = withStyles(styles)(
             <TableCell>
               &nbsp;
             </TableCell>
-            <TableCell style={{ paddingLeft: '15px' }}>
-              <Typography variant="overline">Exchange</Typography>
-            </TableCell>
+            <TableCell><Typography variant="overline">Exchange</Typography></TableCell>
+            <TableCell><Typography variant="overline">Location</Typography></TableCell>
+            {/*<TableCell><Typography variant="overline">Fees</Typography></TableCell>*/}
+            <TableCell><Typography variant="overline">Fiat Supported</Typography></TableCell>
+            <TableCell><Typography variant="overline">Fiat Payments</Typography></TableCell>
             <TableCell>
-              <Typography variant="overline">Location</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography variant="overline">Fees</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography variant="overline">Fiat Supported</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography variant="overline">Fiat Payments</Typography>
-            </TableCell>
-            <TableCell style={{ padding: '10px', minWidth: '200px' }}>
               <Typography variant="overline">
                 Excluded Residents
               </Typography>
@@ -156,9 +153,11 @@ const ExchangesListTable = withStyles(styles)(
               <TableCell><Icon item={item} /> {console.log(item)}</TableCell>
               <TableCell><Typography variant="h6">{item.name}</Typography></TableCell>
               <TableCell><Typography variant="h6">{item.data.location || '-'}</Typography></TableCell>
-              <TableCell><Typography variant="h6">{item.data.fees || '-'}</Typography></TableCell>
+              {/*<TableCell><Typography variant="h6">{item.data.fees || '-'}</Typography></TableCell>*/}
               <TableCell>
-                {isFiatSupported(item) ? item.data.fiatSupported.map((fiat, index) => <Tag key={index} css={{}}>{fiat}</Tag>) : '-'}
+                <Grid container>
+                  {isFiatSupported(item) ? item.data.fiatSupported.map((fiat, index) => <Tag key={index} css={{}}>{fiat}</Tag>) : '-'}
+                </Grid>
               </TableCell>
               <TableCell>
                 {isFiatPayments(item) ? item.data.fiatPayments.map((payment, index) => (
@@ -167,6 +166,20 @@ const ExchangesListTable = withStyles(styles)(
                     {index !== item.data.fiatPayments.length - 1 ? ',' : ''}
                   </Typography>
                   )) : '-'}
+              </TableCell>
+              <TableCell>
+                <Grid container>
+                  {isNotExcludedResidents(item) ? '-' :
+                    item.data.excludedResidents.map((excluded, index) => item.data.excludedResidents.length - 1 > index ? (
+                      <Typography variant="h6" key={index} className={classes.resident}>{excluded},</Typography>
+                    ) : (
+                      <Typography variant="h6" key={index} className={classes.resident}>{excluded}</Typography>
+                    )
+                  )}
+                </Grid>
+              </TableCell>
+              <TableCell>
+                <DetailsButton text={getButtonText(item.status)} onClick={() => onDetailsClick(item)} disabled={item.status === 'Inactive'} color={item.status === 'Inactive' ? 'secondary' : 'primary'} />
               </TableCell>
             </TableRow>
           ))}

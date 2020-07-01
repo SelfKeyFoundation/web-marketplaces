@@ -11,6 +11,72 @@ class FlagTheoryAPI {
     // this.#rateLimiter = new Bottleneck({ minTime: 1050 / 5 });
   }
 
+  fetchBankAccounts () {
+    return new Promise<any>(async (resolve) => {
+
+      const cacheKey = 'ft-bank-accounts';
+      const cache = Cache.getValid(cacheKey);
+
+      if (cache !== undefined) {
+        console.log(`Cache hit FT-Bank-Accounts`);
+        resolve(cache);
+      }
+      else {
+        // TODO: move URLs to config
+        const response = await fetch('https://api.bankaccounts.io/api/bank-accounts');
+        const fetched = await response.json();
+
+        const mapData = field => (acc, curr) => {
+          const details = mapKeys(curr.data.fields, (value, key) => camelCase(key));
+          return { ...acc, [details[field]]: details };
+        };
+
+        const jurisdictions = fetched.Jurisdictions.reduce(mapData('countryCode'), {});
+        const accDetails = fetched.Account_Details.reduce(mapData('bankCode'), {});
+
+        const items = fetched.Main.map(itm => mapKeys(itm.data.fields, (value, key) => camelCase(key)))
+          .filter(itm => itm.region && (itm.accountCode || itm.countryCode))
+          .map(itm => {
+            itm.accountCode = ('' + itm.accountCode.trim() || null);
+            itm.countryCode = ('' + itm.countryCode.trim() || null);
+            const sku = `FT-BNK-${itm.accountCode || itm.countryCode}`;
+            const name = `${itm.region} ${itm.accountCode || itm.countryCode}`;
+            let price = itm.activeTestPrice ? itm.testPrice : itm.price;
+            itm = {
+              sku,
+              name,
+              status: itm.showWallet ? 'active' : 'inactive',
+              price,
+              priceCurrency: 'USD',
+              category: 'banking',
+              vendorId: 'flagtheory_banking',
+              data: {
+                ...itm,
+                jurisdiction: jurisdictions[itm.countryCode] || {},
+                accounts: Object.keys(accDetails)
+                  .filter(key => accDetails[key].accountCode === itm.accountCode)
+                  .reduce((obj, key) => {
+                    obj[key] = accDetails[key];
+                    return obj;
+                  }, {})
+              }
+            };
+
+            itm.data.type =
+              itm.data.type && itm.data.type.length
+                ? itm.data.type[0].toLowerCase()
+                : 'private';
+            itm.entityType = itm.data.type === 'business' ? 'corporate' : 'individual';
+              return itm;
+          }
+        );
+
+        Cache.write(cacheKey, items);
+        resolve(items);
+      }
+    });
+  }
+
   fetchIncorporations () {
     return new Promise<any>(async (resolve) => {
 
