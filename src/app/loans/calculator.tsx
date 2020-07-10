@@ -11,7 +11,7 @@ import {
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { withStyles, createStyles, WithStyles } from '@material-ui/styles';
 import { KeyboardArrowDown } from '@material-ui/icons';
-import { TransferIcon } from 'selfkey-ui/build/lib/icons';
+import { TransferIcon } from 'selfkey-ui/build-esnext/lib/icons';
 import { LoansCalculatorBorrowTable } from './borrow-table';
 import { LoansCalculatorLendTable } from './lend-table';
 
@@ -83,7 +83,7 @@ const CURRENCIES = ['USD', 'EUR', 'GBP'];
 
 type LoansCalculatorProps = WithStyles<typeof styles> & {
   inventory: any;
-  rates: any;
+  rates: any[];
   fiatRates: any;
   onDetailsClick: (any) => any; // FIXME: function type
   id?: string;
@@ -119,7 +119,7 @@ const calculateCollateral = ({ amount, token, rates, ltv }) => {
   const rate = rates.find(r => r.symbol === token);
   let LTV = ltv ? parseFloat(ltv) / 100 : 1;
   LTV = LTV <= 0 ? 1 : LTV;
-  const collateral = amount / (rate.priceUSD * LTV);
+  const collateral = amount / (parseFloat(rate.priceUsd) * LTV);
   return `${collateral.toFixed(2)} ${rate.symbol}`;
 };
 

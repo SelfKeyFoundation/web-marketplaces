@@ -17,7 +17,10 @@ const styles = createStyles({
     margin: '20px'
   },
   icon: {
-    marginLeft: '20px'
+    marginLeft: '20px',
+    ['@media (max-width: 600px)']: {
+      marginLeft: '10px',
+    }
   },
   header: {
     backgroundColor: '#2a3540',

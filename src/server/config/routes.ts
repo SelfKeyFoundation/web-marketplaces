@@ -21,13 +21,23 @@ class UrlRoutes {
   loadRoutes (app: Application) {
     const CACHE_TIMEOUT = app.get('env') === 'development' ? 0 : 9800;
 
-    app.get('/', (req: Request, res: Response, next: NextFunction) => {
-      controller.root(req, res, next);
-    });
-
-    app.get('/data', routeCache.cacheSeconds(CACHE_TIMEOUT, this.cacheKey),
+    app.get('/data/:name', routeCache.cacheSeconds(CACHE_TIMEOUT, this.cacheKey),
       (req: Request, res: Response, next: NextFunction) => {
         controller.data(req, res, next);
+    });
+
+    app.get('/marketplace/:name/:sku', routeCache.cacheSeconds(CACHE_TIMEOUT, this.cacheKey),
+      (req: Request, res: Response, next: NextFunction) => {
+        controller.root(req, res, next);
+    });
+
+    app.get('/marketplace/:name', routeCache.cacheSeconds(CACHE_TIMEOUT, this.cacheKey),
+      (req: Request, res: Response, next: NextFunction) => {
+        controller.root(req, res, next);
+    });
+
+    app.get('/', (req: Request, res: Response, next: NextFunction) => {
+      controller.root(req, res, next);
     });
 
     app.get('*', (req: Request, res: Response) => {

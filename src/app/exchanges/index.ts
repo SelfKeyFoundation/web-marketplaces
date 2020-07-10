@@ -1,1 +1,1 @@
-export { ExchangesListPage } from './exchanges-list-page';
+export { ExchangesContainer } from './container';

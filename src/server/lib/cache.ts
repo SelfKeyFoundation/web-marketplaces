@@ -10,8 +10,8 @@ const Cache = {
 
     cachePath: () => process.env.NODE_ENV === 'production' ? `cache/` : `dist/cache/`,
 
-    write: (path: string, object: any) => {
-      path = Cache.cachePath() + path;
+    write: (key: string, object: any) => {
+      const path = Cache.cachePath() + key;
       const pathComponents = path.split('/');
       let intermediatePath = '';
 
@@ -36,16 +36,19 @@ const Cache = {
       });
     },
 
-    getValid: (path: string) => {
+    getValid: (key: string) => {
       let shouldSendCache = false;
+      const path = Cache.cachePath() + key;
       if (existsSync(path)) {
         const cachedTime = statSync(path).ctime;
+        console.log(cachedTime);
         shouldSendCache = ((new Date().getTime() / 1000.0 - (cachedTime as any) / 1000.0) < cacheInterval);
       }
-      return shouldSendCache ? Cache.get(path) : undefined;
+      return shouldSendCache ? Cache.get(key) : undefined;
     },
 
-    get: (path: string): Record<string, unknown> | undefined => {
+    get: (key: string): Record<string, unknown> | undefined => {
+      const path = Cache.cachePath() + key;
       if (existsSync(path)) {
         return JSON.parse(readFileSync(path, 'utf8'));
       }

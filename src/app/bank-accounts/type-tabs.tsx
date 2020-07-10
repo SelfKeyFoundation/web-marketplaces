@@ -9,13 +9,13 @@ const styles = createStyles({
   }
 });
 
-type BankingAccountTypeTabsProps = {
+type BankingAccountTypeTabsProps = WithStyles<typeof styles> & {
   accountType: string,
-  onAccountTypeChange: (item: any) => any
+  onAccountTypeChange: (type: string) => void;
 };
 
 const BankingAccountTypeTabs = withStyles(styles)(
-  ({ classes, accountType, onAccountTypeChange }: BankingAccountTypeTabsProps & WithStyles<typeof styles>) => {
+  ({ classes, accountType, onAccountTypeChange }: BankingAccountTypeTabsProps) => {
     return (
       <React.Fragment>
         {accountType !== 'business' && (

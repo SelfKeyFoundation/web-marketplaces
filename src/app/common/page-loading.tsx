@@ -12,7 +12,7 @@ type PageLoadingProps = {};
 
 const PageLoading = withStyles(styles)(
   ({ classes }: PageLoadingProps & WithStyles<typeof styles>) => (
-    <Grid container justify="center" alignItems="center">
+    <Grid container justify="center" alignItems="center" style={{ minHeight: '30vh' }}>
       <CircularProgress size={50} className={classes.loading} />
     </Grid>
   )

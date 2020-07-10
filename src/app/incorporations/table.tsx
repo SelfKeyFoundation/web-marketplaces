@@ -7,14 +7,33 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
-import { LargeTableHeadRow, TagTableCell } from 'selfkey-ui/build/lib/materialui/tables';
-import { Tag } from 'selfkey-ui/build/lib/materialui/typography';
+import { LargeTableHeadRow, TagTableCell } from 'selfkey-ui/build-esnext/lib/materialui/tables';
+import { Tag } from 'selfkey-ui/build-esnext/lib/materialui/typography';
 import { ProgramPrice, FlagCountryName, DetailsButton } from '../common';
 
-const styles = createStyles({
+const styles = theme => createStyles({
   table: {
+    maxWidth: '100%',
     '& td': {
-      height: 'auto'
+      height: 'auto',
+      ['@media (max-width: 600px)']: {
+        padding: '5px'
+      }
+    },
+    '& td h6': {
+      ['@media (max-width: 600px)']: {
+        fontSize: '10px'
+      }
+    },
+    '& th': {
+      ['@media (max-width: 600px)']: {
+        padding: '5px'
+      }
+    },
+    '& th span': {
+      ['@media (max-width: 600px)']: {
+        fontSize: '10px'
+      }
     }
   },
   tableHeaderRow: {
@@ -47,7 +66,10 @@ const styles = createStyles({
     }
   },
   costCell: {
-    width: '70px'
+    width: '70px',
+    ['@media (max-width: 600px)']: {
+      display: 'none'
+    }
   },
   smallCell: {
     width: '35px',
@@ -59,7 +81,10 @@ const styles = createStyles({
   },
   regionCell: {
     width: '60px',
-    padding: '0'
+    padding: '0',
+    ['@media (max-width: 600px)']: {
+      display: 'none'
+    }
   },
   detailsCell: {
     width: '55px',
@@ -70,11 +95,14 @@ const styles = createStyles({
   },
   goodForCell: {
     width: '305px',
-    padding: '10px'
+    padding: '10px',
+    ['@media (max-width: 600px)']: {
+      display: 'none'
+    }
   }
 });
 
-type IncorporationsListTableProps = {
+type IncorporationsTableProps = WithStyles<typeof styles> & {
   keyRate?: number;
   data: any[];
   onDetailsClick: (any) => any; // FIXME: function type
@@ -82,8 +110,8 @@ type IncorporationsListTableProps = {
 }
 
 
-const IncorporationsListTable = withStyles(styles)(
-  ({ classes, keyRate = 1, data = [], onDetailsClick, className }: IncorporationsListTableProps & WithStyles<typeof styles>) => {
+const IncorporationsTable = withStyles(styles)(
+  ({ classes, keyRate = 0, data = [], onDetailsClick, className }: IncorporationsTableProps) => {
     return (
       <Table className={classNames(classes.table, className)}>
         <TableHead>
@@ -111,7 +139,7 @@ const IncorporationsListTable = withStyles(styles)(
           </LargeTableHeadRow>
         </TableHead>
         <TableBody className={classes.tableBodyRow}>
-          {data.filter(inc => !!inc.data && inc.category == 'incorporations').map(inc => (
+          {data.filter(inc => !!inc.data && inc.category == 'incorporations' && inc.status === 'active').map(inc => (
             <TableRow key={inc.id}>
               <TableCell className={classes.flagCell}>
                 <FlagCountryName code={inc.data.countryCode} size="small" />
@@ -135,7 +163,7 @@ const IncorporationsListTable = withStyles(styles)(
               <TagTableCell className={classes.goodForCell} css={{}}>
                 <Grid container>
                   {inc.data.goodFor &&
-                    inc.data.goodFor.map(tag => <Tag key={tag} css={{}}>{tag}</Tag>)}
+                    inc.data.goodFor.map((tag: string) => <Tag key={tag} css={{}}>{tag}</Tag>)}
                 </Grid>
               </TagTableCell>
               <TableCell className={classes.costCell}>
@@ -152,5 +180,5 @@ const IncorporationsListTable = withStyles(styles)(
   }
 );
 
-export default IncorporationsListTable;
-export { IncorporationsListTable };
+export default { IncorporationsTable };
+export { IncorporationsTable };

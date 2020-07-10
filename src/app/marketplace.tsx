@@ -1,36 +1,61 @@
-import React from 'react';
+import React, { PureComponent }  from 'react';
 import { withRouter, RouteComponentProps } from "react-router-dom";
 // import { Grid, Typography } from '@material-ui/core';
 // import { WithStyles, withStyles, createStyles } from '@material-ui/core';
-import { IncorporationsListPage } from './incorporations';
-import { ExchangesListPage } from './exchanges';
-import { BankAccountsListPage } from './bank-accounts';
-import { LoansListPage } from './loans';
+// import { IncorporationsContainer } from './incorporations';
+// import { ExchangesContainer } from './exchanges';
+// import { BankAccountsContainer } from './bank-accounts';
+// import { LoansContainer } from './loans';
 
-const MarketplaceComponent = (({ match }: RouteComponentProps) => {
-  let marketplaceComponent: any = null;
+type MarketplaceComponentState = {
+  component: any;
+}
 
-  switch(match.params.name) {
-    case 'incorporations':
-      marketplaceComponent = <IncorporationsListPage />;
-      break;
-    case 'exchanges':
-      marketplaceComponent = <ExchangesListPage />;
-      break;
-    case 'bank-accounts':
-      marketplaceComponent = <BankAccountsListPage />;
-      break;
-    case 'loans':
-      marketplaceComponent = < LoansListPage />;
-      break;
+class MarketplaceComponent extends PureComponent<RouteComponentProps, MarketplaceComponentState> {
+  state = {
+    component: null
   }
 
-  return (
-    <React.Fragment>
-      {marketplaceComponent}
-    </React.Fragment>
-  );
-});
+  async componentWillMount () {
+    const name = this.props.match.params.name;
+    console.log(`Loading marketplace ${name}`);
+    switch(name) {
+      case 'incorporations': {
+          const module: any = await import('./incorporations/container');
+          this.setState({ component: module.default });
+        }
+        break;
+      case 'exchanges': {
+          const module: any = await import('./exchanges/container');
+          this.setState({ component: module.default });
+        }
+        break;
+      case 'bank-accounts': {
+          const module: any = await import('./bank-accounts/container');
+          this.setState({ component: module.default });
+        }
+        break;
+      case 'loans': {
+          const module: any = await import('./loans/container');
+          this.setState({ component: module.default });
+        }
+        break;
+    }
+  }
+
+  render() {
+    if (!this.state.component) {
+      return null;
+    }
+    const Component = this.state.component as any;
+    return (
+      <React.Fragment>
+        <Component />
+      </React.Fragment>
+    );
+
+  }
+}
 
 const Marketplace = withRouter(MarketplaceComponent);
 export { Marketplace };

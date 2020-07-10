@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import { WithStyles, withStyles, createStyles } from '@material-ui/core';
 import { Typography, Grid } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
@@ -7,12 +7,36 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
-import { Tag } from 'selfkey-ui/build/lib/materialui/typography';
-import { LargeTableHeadRow } from 'selfkey-ui/build/lib/materialui/tables';
+import { Tag } from 'selfkey-ui/build-esnext/lib/materialui/typography';
+import { LargeTableHeadRow } from 'selfkey-ui/build-esnext/lib/materialui/tables';
 import { LoansFilters } from './loans-filters';
 import { DetailsButton } from '../common';
 
 const styles = createStyles({
+  table: {
+    maxWidth: '100%',
+    '& td': {
+      height: 'auto',
+      ['@media (max-width: 600px)']: {
+        padding: '5px'
+      }
+    },
+    '& td h6': {
+      ['@media (max-width: 600px)']: {
+        fontSize: '10px'
+      }
+    },
+    '& th': {
+      ['@media (max-width: 600px)']: {
+        padding: '5px'
+      }
+    },
+    '& th span': {
+      ['@media (max-width: 600px)']: {
+        fontSize: '10px'
+      }
+    }
+  },
   nameCell: {
     padding: '15px 15px 15px 13px',
     maxWidth: '220px',
@@ -41,6 +65,16 @@ const styles = createStyles({
   detailsCell: {
     width: '55px',
     padding: '15px'
+  },
+  assets: {
+    ['@media (max-width: 600px)']: {
+      display: 'none'
+    }
+  },
+  maxLoan: {
+    ['@media (max-width: 600px)']: {
+      display: 'none'
+    }
   }
 });
 
@@ -99,7 +133,6 @@ class LoansTableComponent extends PureComponent<LoansTableProps, LoansTableState
   };
 
   inventoryUniqueTokensByFilterType = (inventory, type) => {
-    console.log(inventory);
     const tokens = inventory.reduce((acc, offer) => {
       const { assets, loanType } = offer.data;
       if (assets && loanType && loanType.includes(type)) {
@@ -192,7 +225,7 @@ class LoansTableComponent extends PureComponent<LoansTableProps, LoansTableState
           onRateRangeChange={this.onRateRangeChange}
           range={this.inventoryRateRangeLimits(inventory, filter)}
         />
-        <Table className={classNames(className)}>
+        <Table className={classNames(className, classes.table)}>
           <TableHead>
             <LargeTableHeadRow css={{}}>
               <TableCell className={classes.logoCell} />
@@ -210,10 +243,10 @@ class LoansTableComponent extends PureComponent<LoansTableProps, LoansTableState
               <TableCell>
                 <Typography variant="overline">Current Rates</Typography>
               </TableCell>
-              <TableCell>
+              <TableCell className={classes.assets}>
                 <Typography variant="overline">Assets Accepted</Typography>
               </TableCell>
-              <TableCell>
+              <TableCell className={classes.maxLoan}>
                 <Typography variant="overline">Max Loan</Typography>
               </TableCell>
               <TableCell className={classes.detailsCell} />
@@ -241,7 +274,7 @@ class LoansTableComponent extends PureComponent<LoansTableProps, LoansTableState
                 <TableCell>
                   <Typography variant="h6">{offer.data.interestRate}</Typography>
                 </TableCell>
-                <TableCell>
+                <TableCell className={classes.assets}>
                   <Grid container>
                     {offer.data.assets &&
                       offer.data.assets.map(tag => (
@@ -251,7 +284,7 @@ class LoansTableComponent extends PureComponent<LoansTableProps, LoansTableState
                       ))}
                   </Grid>
                 </TableCell>
-                <TableCell>
+                <TableCell className={classes.maxLoan}>
                   <Typography variant="h6">{offer.data.maxLoan}</Typography>
                 </TableCell>
                 <TableCell className={classes.detailsCell}>

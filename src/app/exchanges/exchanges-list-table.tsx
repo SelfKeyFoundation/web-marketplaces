@@ -7,14 +7,33 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
-import { LargeTableHeadRow /*, TagTableCell */ } from 'selfkey-ui/build/lib/materialui/tables';
-import { Tag } from 'selfkey-ui/build/lib/materialui/typography';
+import { LargeTableHeadRow /*, TagTableCell */ } from 'selfkey-ui/build-esnext/lib/materialui/tables';
+import { Tag } from 'selfkey-ui/build-esnext/lib/materialui/typography';
 import { DetailsButton } from '../common';
 
 const styles = createStyles({
   table: {
+    maxWidth: '100%',
     '& td': {
-      height: 'auto'
+      height: 'auto',
+      ['@media (max-width: 600px)']: {
+        padding: '5px'
+      }
+    },
+    '& td h6': {
+      ['@media (max-width: 600px)']: {
+        fontSize: '10px'
+      }
+    },
+    '& th': {
+      ['@media (max-width: 600px)']: {
+        padding: '5px'
+      }
+    },
+    '& th span': {
+      ['@media (max-width: 600px)']: {
+        fontSize: '10px'
+      }
     }
   },
   tableHeaderRow: {
@@ -86,16 +105,21 @@ const styles = createStyles({
     padding: '10px 10px 10px 0',
     whiteSpace: 'normal',
     width: '100px',
-    wordBreak: 'break-word'
+    wordBreak: 'break-word',
   },
   resident: {
     marginRight: '5px',
     whiteSpace: 'initial',
     display: 'inline-block'
+  },
+  excludedCell: {
+    ['@media (max-width: 600px)']: {
+      display: 'none'
+    }
   }
 });
 
-type ExchangesListTableProps = {
+type ExchangesListTableProps = WithStyles<typeof styles> & {
   keyRate?: number;
   data: any[];
   onDetailsClick: (any) => any; // FIXME: function type
@@ -104,7 +128,7 @@ type ExchangesListTableProps = {
 
 
 const ExchangesListTable = withStyles(styles)(
-  ({ classes, keyRate = 1, data = [], onDetailsClick, className }: ExchangesListTableProps & WithStyles<typeof styles>) => {
+  ({ classes, keyRate = 1, data = [], onDetailsClick, className }: ExchangesListTableProps ) => {
 
     const Icon = ({ item }) => {
       const getColors = () => ['#46dfba', '#46b7df', '#238db4', '#25a788', '#0e4b61'];
@@ -139,7 +163,7 @@ const ExchangesListTable = withStyles(styles)(
             {/*<TableCell><Typography variant="overline">Fees</Typography></TableCell>*/}
             <TableCell><Typography variant="overline">Fiat Supported</Typography></TableCell>
             <TableCell><Typography variant="overline">Fiat Payments</Typography></TableCell>
-            <TableCell>
+            <TableCell className={classes.excludedCell}>
               <Typography variant="overline">
                 Excluded Residents
               </Typography>
@@ -150,30 +174,30 @@ const ExchangesListTable = withStyles(styles)(
         <TableBody className={classes.tableBodyRow}>
           {data.filter(item => !!item.data && item.category == 'exchanges').map(item => (
             <TableRow key={item.id}>
-              <TableCell><Icon item={item} /> {console.log(item)}</TableCell>
+              <TableCell><Icon item={item} /></TableCell>
               <TableCell><Typography variant="h6">{item.name}</Typography></TableCell>
               <TableCell><Typography variant="h6">{item.data.location || '-'}</Typography></TableCell>
               {/*<TableCell><Typography variant="h6">{item.data.fees || '-'}</Typography></TableCell>*/}
               <TableCell>
                 <Grid container>
-                  {isFiatSupported(item) ? item.data.fiatSupported.map((fiat, index) => <Tag key={index} css={{}}>{fiat}</Tag>) : '-'}
+                  {isFiatSupported(item) ? item.data.fiatSupported.map((fiat, index) => <Tag key={`${index}-fiat`} css={{}}>{fiat}</Tag>) : '-'}
                 </Grid>
               </TableCell>
               <TableCell>
                 {isFiatPayments(item) ? item.data.fiatPayments.map((payment, index) => (
-                  <Typography variant="h6" key={index} className={classes.excluded}>
+                  <Typography variant="h6" key={`${index}-payments`} className={classes.excluded}>
                     {payment}
                     {index !== item.data.fiatPayments.length - 1 ? ',' : ''}
                   </Typography>
                   )) : '-'}
               </TableCell>
-              <TableCell>
+              <TableCell className={classes.excludedCell}>
                 <Grid container>
                   {isNotExcludedResidents(item) ? '-' :
                     item.data.excludedResidents.map((excluded, index) => item.data.excludedResidents.length - 1 > index ? (
-                      <Typography variant="h6" key={index} className={classes.resident}>{excluded},</Typography>
+                      <Typography variant="h6" key={`${index}-residents`} className={classes.resident}>{excluded},</Typography>
                     ) : (
-                      <Typography variant="h6" key={index} className={classes.resident}>{excluded}</Typography>
+                      <Typography variant="h6" key={`${index}-residents`} className={classes.resident}>{excluded}</Typography>
                     )
                   )}
                 </Grid>

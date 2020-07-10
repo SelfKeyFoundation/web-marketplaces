@@ -1,1 +1,1 @@
-export { IncorporationsListPage } from './incorporations-list-page';
+export { IncorporationsContainer } from './container';

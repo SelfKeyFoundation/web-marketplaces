@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Grid, Input, Select, MenuItem, Slider, FormControl } from '@material-ui/core';
 import { withStyles, createStyles, WithStyles } from '@material-ui/styles';
-import { SelectDropdownIcon } from 'selfkey-ui';
+import { SelectDropdownIcon } from 'selfkey-ui/build-esnext/lib/icons';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 
 const styles = createStyles({
@@ -16,6 +16,12 @@ const styles = createStyles({
     },
     '& .MuiSlider-markLabelActive': {
       top: '26px'
+    },
+    '& .MuiGrid-item': {
+      ['@media (max-width: 600px)']: {
+        margin: 'auto',
+        padding: '10px'
+      }
     }
   },
   rangeContainer: {

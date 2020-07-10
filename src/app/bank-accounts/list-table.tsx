@@ -7,14 +7,33 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
-import { LargeTableHeadRow, TagTableCell } from 'selfkey-ui/build/lib/materialui/tables';
-import { Tag } from 'selfkey-ui/build/lib/materialui/typography';
+import { LargeTableHeadRow, TagTableCell } from 'selfkey-ui/build-esnext/lib/materialui/tables';
+import { Tag } from 'selfkey-ui/build-esnext/lib/materialui/typography';
 import { ProgramPrice, FlagCountryName, DetailsButton } from '../common';
 
-const styles = createStyles({
+const styles = theme => createStyles({
   table: {
+    maxWidth: '100%',
     '& td': {
-      height: 'auto'
+      height: 'auto',
+      ['@media (max-width: 600px)']: {
+        padding: '5px'
+      }
+    },
+    '& td h6': {
+      ['@media (max-width: 600px)']: {
+        fontSize: '10px'
+      }
+    },
+    '& th': {
+      ['@media (max-width: 600px)']: {
+        padding: '5px'
+      }
+    },
+    '& th span': {
+      ['@media (max-width: 600px)']: {
+        fontSize: '10px'
+      }
     }
   },
   tableHeaderRow: {
@@ -47,7 +66,10 @@ const styles = createStyles({
     }
   },
   costCell: {
-    width: '70px'
+    width: '70px',
+    ['@media (max-width: 600px)']: {
+      display: 'none'
+    }
   },
   smallCell: {
     width: '35px',
@@ -70,26 +92,36 @@ const styles = createStyles({
   },
   goodForCell: {
     width: '305px',
-    padding: '10px'
+    padding: '10px',
+    ['@media (max-width: 600px)']: {
+      display: 'none'
+    }
+  },
+  eligibility: {
+    ['@media (max-width: 600px)']: {
+      display: 'none'
+    }
   }
 });
 
-const isPersonalVisitRequired = accounts => Object.keys(accounts).reduce((required, accountId) => {
+const isPersonalVisitRequired = accounts =>
+  Object.keys(accounts).reduce((required, accountId) => {
     const account = accounts[accountId];
     return required && account.personalVisitRequired;
   }, true);
 
-type BankAccountsListTableProps = {
+type BankAccountsListTableProps = WithStyles<typeof styles> & {
   keyRate?: number;
   data: any[];
   onDetailsClick: (any) => any; // FIXME: function type
-  className?: string
+  className?: string;
+  accountType?: string;
 }
 
 
 const BankAccountsListTable = withStyles(styles)(
-  ({ classes, keyRate = 1, data = [], onDetailsClick, className }: BankAccountsListTableProps & WithStyles<typeof styles>) => {
-    console.log(data);
+  ({ classes, keyRate = 0, data = [], onDetailsClick, accountType, className }: BankAccountsListTableProps) => {
+    const items = data.filter(item => !!item.data && item.category == 'banking' && item.data.type === accountType && item.data.showWallet);
     return (
       <Table className={classNames(classes.table, className)}>
         <TableHead>
@@ -98,7 +130,7 @@ const BankAccountsListTable = withStyles(styles)(
             <TableCell className={classes.regionCell}>
               <Typography variant="overline">Region</Typography>
             </TableCell>
-            <TableCell>
+            <TableCell className={classes.eligibility}>
               <Typography variant="overline">Eligibility</Typography>
             </TableCell>
             <TableCell>
@@ -119,7 +151,7 @@ const BankAccountsListTable = withStyles(styles)(
           </LargeTableHeadRow>
         </TableHead>
         <TableBody className={classes.tableBodyRow}>
-          {data.filter(item => !!item.data && item.category == 'banking').map(item => (
+          {items.map(item => (
             <TableRow key={item.id}>
               <TableCell className={classes.flagCell}>
                 <FlagCountryName code={item.data.countryCode} size="small" />
@@ -127,7 +159,7 @@ const BankAccountsListTable = withStyles(styles)(
               <TableCell className={classes.regionCell}>
                 <Typography variant="h6">{item.data.region}</Typography>
               </TableCell>
-              <TableCell>
+              <TableCell className={classes.eligibility}>
                 <div>
                   {item.data.eligibility && item.data.eligibility.map((tag, index) => (
                     <Typography variant="h6" key={tag}>
@@ -149,7 +181,8 @@ const BankAccountsListTable = withStyles(styles)(
                 {isPersonalVisitRequired(item.data.accounts) ? (<Typography variant="h6">Yes</Typography>) : (<Typography variant="h6">No</Typography>)}
               </TableCell>
               <TableCell className={classes.costCell}>
-                <ProgramPrice label="$" price={'0'} rate={keyRate} />
+                {console.log(item.price, keyRate)}
+                <ProgramPrice label="$" price={item.price} rate={keyRate} />
               </TableCell>
               <TableCell className={classes.detailsCell}>
                 <DetailsButton onClick={() => onDetailsClick(item)} id={`details${item.data.countryCode}`} />

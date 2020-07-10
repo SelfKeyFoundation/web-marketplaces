@@ -9,7 +9,7 @@ import postCssPresetEnv from 'postcss-preset-env';
 import postCssImport from 'postcss-import'; // Automatically inline imports
 import postCssUrl from 'postcss-url';
 
-import { rollupManifest as manifest } from './lib/rollup-manifest';
+import { manifest } from './lib/rollup-manifest';
 
 import babel              from '@rollup/plugin-babel';
 import { terser }         from 'rollup-plugin-terser'

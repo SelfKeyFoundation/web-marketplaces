@@ -9,7 +9,10 @@ import { categories } from './categories';
 const styles = createStyles({
   header: {
     '& h1': {
-      marginLeft: '20px'
+      marginLeft: '20px',
+      ['@media (max-width: 600px)']: {
+        marginLeft: '10px',
+      }
     },
     '& svg': {
       marginLeft: 0

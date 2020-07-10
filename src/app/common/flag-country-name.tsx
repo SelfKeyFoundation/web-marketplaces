@@ -19,7 +19,7 @@ const styles = createStyles({
 });
 
 type FlagCountryNameProps = {
-  size: string;
+  size?: string;
   code: string,
   name?: string
 };

@@ -6,9 +6,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { LargeTableHeadRow } from 'selfkey-ui/build/lib/materialui/tables';
+import { LargeTableHeadRow } from 'selfkey-ui/build-esnext/lib/materialui/tables';
 import { DetailsButton } from '../common';
-import { Tag } from 'selfkey-ui/build/lib/materialui/typography';
+import { Tag } from 'selfkey-ui/build-esnext/lib/materialui/typography';
 
 const styles = createStyles({
   nameCell: {

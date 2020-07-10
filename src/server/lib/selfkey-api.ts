@@ -3,6 +3,8 @@ import fetch from 'node-fetch';
 import { Cache } from './cache';
 import { camelCase, mapKeys } from 'lodash';
 
+const MARKETPLACES = ['Loans', 'Incorporations', 'Notaries', 'Exchanges'];
+
 class SelfkeyAPI {
   // #rateLimiter: any;
 
@@ -16,29 +18,36 @@ class SelfkeyAPI {
     .map(entity => mapKeys(entity.data, (value, key) => camelCase(key)));
 
   fetchInventory () {
-    return new Promise<any>(async (resolve) => {
+    return new Promise<any>(resolve => {
 
       const cacheKey = 'sk-inventory'
       const cache = Cache.getValid(cacheKey);
 
       if (cache !== undefined) {
-        console.log(`Cache hit FT-Incorporations`);
+        console.log(`Cache hit ${cacheKey}`);
         resolve(cache);
       }
       else {
         // TODO: move URLs to config
-        let response = await fetch('https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=Inventory');
-        let json = await response.json();
-        const inventory = this._format(json);
-
-        Cache.write(cacheKey, inventory);
-        resolve(inventory);
+        fetch('https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=Inventory')
+          .then(response => response.json())
+          .then(data => {
+            const inventory = this._format(data);
+            Cache.write(cacheKey, inventory);
+            resolve(inventory);
+          });
       }
     });
   }
 
-  fetchData(marketplaceName: string) {
-    return new Promise<any>(async (resolve) => {
+  fetchData(name: string) {
+    const marketplaceName = (name.charAt(0).toUpperCase() + name.slice(1));
+
+    if (!MARKETPLACES.includes(marketplaceName)) {
+      return [];
+    }
+
+    return new Promise<any>(resolve => {
 
       const cacheKey = `sk-${marketplaceName}`;
       const cache = Cache.getValid(cacheKey);
@@ -49,12 +58,13 @@ class SelfkeyAPI {
       }
       else {
         // TODO: move URLs to config
-        let response = await fetch(`https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=${marketplaceName}`);
-        let json = await response.json();
-        const data = this._format(json);
-
-        Cache.write(cacheKey, data);
-        resolve(data);
+        fetch(`https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=${marketplaceName}`)
+          .then(response => response.json())
+          .then(data => {
+            data = this._format(data);
+            Cache.write(cacheKey, data);
+            resolve(data);
+          });
       }
     });
   }

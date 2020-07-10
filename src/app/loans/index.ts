@@ -1,1 +1,1 @@
-export { LoansListPage } from './loans-list-page';
+export { LoansContainer } from './container';

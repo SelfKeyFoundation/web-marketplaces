@@ -1,1 +1,1 @@
-export { BankAccountsListPage } from './bank-accounts-list-page';
+export { BankAccountsContainer } from './container';

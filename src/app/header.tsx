@@ -1,11 +1,11 @@
 import React from 'react';
 import { Grid, Typography, Link } from '@material-ui/core';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+// import Menu from '@material-ui/core/Menu';
+// import MenuItem from '@material-ui/core/MenuItem';
 // import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+// import ListItemText from '@material-ui/core/ListItemText';
 import { WithStyles, withStyles, createStyles } from '@material-ui/core';
-import { SelfkeyLogo, DropdownIcon } from 'selfkey-ui/build/lib/icons';
+import { SelfkeyLogo, /*DropdownIcon*/ } from 'selfkey-ui/build-esnext/lib/icons';
 
 
 const styles = createStyles({
@@ -13,7 +13,10 @@ const styles = createStyles({
     '& h2': {
       display: 'inline-block'
     },
-    marginBottom: '80px'
+    marginBottom: '80px',
+    ['@media (max-width: 600px)']: {
+      marginBottom: '20px'
+    }
   },
   icon: {
     display: 'flex',
@@ -29,7 +32,11 @@ const styles = createStyles({
       marginLeft: '1em',
       color: '#00C0D9',
       fontSize: '18px',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      ['@media (max-width: 600px)']: {
+        fontSize: '16px',
+        lineHeight: '36px'
+      }
     }
   }
 });
@@ -47,17 +54,22 @@ const Header = withStyles(styles)(({ classes }: WithStyles<typeof styles>) => (
       <SelfkeyLogo />
       <Typography variant="h2">SELFKEY</Typography>
     </Grid>
+
     <Grid item className={classes.menu}>
-      <Typography variant="h2">Marketplaces <DropdownIcon css={{}} /></Typography>
-      <Menu open={false}>
-        <MenuItem>
-          <ListItemText>Opt 1</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemText>Opt 2</ListItemText>
-        </MenuItem>
-      </Menu>
-      <Link href="#">
+      {/*
+      <Typography variant="h2">Marketplaces <DropdownIcon css={{}} style={{ position: 'relative' }} />
+        <Menu open={true}>
+          <MenuItem>
+            <ListItemText>Opt 1</ListItemText>
+          </MenuItem>
+          <MenuItem>
+            <ListItemText>Opt 2</ListItemText>
+          </MenuItem>
+        </Menu>
+      </Typography>
+      */}
+
+      <Link href="/">
         <Typography variant="h2">Identity Wallet</Typography>
       </Link>
       <Link href="#">
