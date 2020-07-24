@@ -1,0 +1,14 @@
+replicaCount: 1
+
+# image: image path
+imagePullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 3000
+
+resources: {}
+
+ingressDomain: false
+ingressHttpDisable: false
+tlsSecret: false
