@@ -10,7 +10,7 @@
     "watch:server": "tsc -w -p tsconfig.server.json",
     "create:folders": "mkdir -p dist/server/public && npm run copy:html",
     "copy:html": "mkdir -p dist/server/views && cp -R src/server/views/* dist/server/views",
-    "server": "DEBUG=app nodemon ./dist/server/index.js",
+    "server": "DEBUG=app nodemon --delay 5 ./dist/server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src --ext .js,.ts,.tsx",
     "build:client": "NODE_ENV=production rollup -c",
