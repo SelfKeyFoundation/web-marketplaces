@@ -4,10 +4,11 @@
   "description": "Web marketplaces",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -f dist/server/public/*.*",
+    "clean": "rm -f dist/server/public/*.* && npm run create:folders",
     "start": "npm run clean && concurrently -k -p \"[{name}]\" -n \"Client,Server,Node\" -c \"yellow.bold,cyan.bold,green.bold,blue.bold\" \"npm run watch:client\" \"npm run watch:server\" \"npm run server\"",
     "watch:client": "rollup -cw",
     "watch:server": "tsc -w -p tsconfig.server.json",
+    "create:folders": "mkdir -p dist/server/public && npm run copy:html",
     "copy:html": "mkdir -p dist/server/views && cp -R src/server/views/* dist/server/views",
     "server": "DEBUG=app nodemon ./dist/server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
