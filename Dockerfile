@@ -11,12 +11,12 @@ RUN apk update && apk upgrade && \
 RUN yarn install --production
 RUN cp -R node_modules prod_node_modules
 RUN yarn install
-RUN yarn create:folders
 
 FROM dependancies as build
 COPY tsconfig.json tsconfig.server.json .eslintrc.json rollup.config.js ./
 COPY lib lib/
 COPY src src/
+RUN yarn create:folders
 RUN yarn build:no-lint
 
 FROM base as release
