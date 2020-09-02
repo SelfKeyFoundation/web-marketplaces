@@ -107,3 +107,4 @@ dist
 
 # Cache folders
 ./cache
+.history

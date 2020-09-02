@@ -1,0 +1,73 @@
+apiVersion: skaffold/v2beta5
+kind: Config
+profiles:
+- name: circleci
+  build:
+    tagPolicy:
+      envTemplate:
+        template: "{{.IMAGE_NAME}}:{{.CIRCLE_BRANCH}}-{{.CIRCLE_SHA1}}"
+    artifacts:
+    - image: asia.gcr.io/selfkey2/web-marketplaces
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          NODE_ENV: production
+    local:
+      push: true
+- name: dev
+  build:
+    local:
+      push: false
+    artifacts:
+    - image: web-marketplaces
+      context: .
+      docker:
+        dockerfile: Dockerfile.dev
+        buildArgs:
+          NODE_ENV: development
+      sync:
+        infer:
+        - "**/*"
+  activation:
+    - command: dev
+  deploy:
+    kubeContext: docker-desktop
+    helm:
+      releases:
+        - name: web-marketplaces-dev
+          chartPath: ./charts/web-marketplaces
+          remote: false
+          artifactOverrides:
+            image: web-marketplaces
+          overrides:
+            service:
+              type: NodePort
+              port: 3000
+- name: run
+  build:
+    local:
+      push: false
+    artifacts:
+    - image: asia.gcr.io/selfkey2/web-marketplaces
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          NODE_ENV: production
+  activation:
+    - command: run
+    - command: delete
+  deploy:
+    kubeContext: docker-desktop
+    helm:
+      releases:
+        - name: web-marketplaces-local-prod
+          chartPath: ./charts/web-marketplaces
+          remote: false
+          artifactOverrides:
+            image: asia.gcr.io/selfkey2/web-marketplaces
+          overrides:
+            service:
+              type: NodePort
+              port: 3000
