@@ -7,7 +7,6 @@ import ejs from 'express-ejs-layouts';
 import errorHandler from 'errorhandler';
 // import favicon from 'serve-favicon';
 // import nodemailer from 'nodemailer';
-
 // import config from './config';
 import { UrlRoutes } from './config/routes'
 
@@ -16,9 +15,6 @@ const app = express();
 app.set('app-name',     'selfkey-web-marketplaces');
 app.set('port',         process.env.PORT || 3000);
 app.set('root',         __dirname);
-app.set('airtable_key', process.env.AIRTABLE_API_KEY);
-app.set('site_url',     process.env.SITE_URL);
-app.set('site_path',    process.env.SITE_PATH);
 app.set('views',        path.join(__dirname, './views'));
 app.set('view engine',  'ejs');
 app.set('env',          process.env.NODE_ENV);
@@ -40,7 +36,6 @@ app.use((req: express.Request, res: express.Response,  next: express.NextFunctio
 
 app.locals.rmWhitespace  = true;
 app.locals.env           = app.settings.env;
-app.locals.sitePath      = app.settings.site_path;
 app.locals.lang          = 'en';
 
 const shouldAuthenticate = () => false;
