@@ -23,5 +23,6 @@ FROM base as release
 COPY --from=dependancies /var/www/prod_node_modules node_modules/
 COPY --from=build /var/www/dist dist/
 
+ENV NODE_ENV production
 EXPOSE 3000
-CMD ["NODE_ENV=production node", "./dist/server/index.js"]
+CMD ["node", "./dist/server/index.js"]
